@@ -106,18 +106,43 @@ function Square(props) {
   function calculateWinner(squares) {
     var isSimilar = false;
     var countCheo=1;
+
     for (var i = 0; i < 20; i++) {
         var countNgang = 1;
         var countDoc = 1;
+        var checkTraiNgang = true;
+        var checkPhaiNgang = true;
+        var checkTraiDoc = true;
+        var checkPhaiDoc = true;
         for(var j=0;j<19;j++) {
             //Hàng ngang
             if(squares[i*20+j]!=null && squares[i*20+j+1]!=null) {
+              
                 if(squares[i*20+j] != squares[i*20+j+1]) {
                     countNgang = 1;
                 } else {
                     countNgang++;
                     if(countNgang==5) {
+                      for(var k=0;k<j;k++) {
+                        if(squares[i*20+k]!=null) {
+                          if(squares[i*20+k]!=squares[i*20+j+1]){
+                            checkTraiNgang = false;
+                          }
+                        }
+
+                      }
+                      for(var k=18;k>=j+2;k--) {
+                        if(squares[i*20+k]!=null) {
+                          if(squares[i*20+k]!=squares[i*20+j+1]){
+                            checkPhaiNgang = false;
+                          }
+                        }
+                      }
+                      if(checkTraiNgang==false&&checkPhaiNgang==false) {
+                        return null;
+                      } else {
                         return squares[i*20+j];
+                      }
                     }
                 }
             } else {
@@ -133,8 +158,27 @@ function Square(props) {
                     countDoc++;
                     
                     if (countDoc == 5) {
+                      
+                      for(var k=0;k<j;k++) {
+                        if(squares[k*20+i]!=null) {
+                          if(squares[k*20+i]!=squares[(j+1)*20+i]) {
+                            checkTraiDoc = false;
+                          }
+                        }
+                      }
+                      for(var k=18;k>=j+2;k--) {
+                        if(squares[k*20+i]!=null) {
+                          if(squares[k*20+i]!=squares[(j+1)*20+i]) {
+                            checkPhaiDoc = false;
+                          }
+                        }
+                      }
+                      if(checkPhaiDoc==false&&checkTraiDoc==false) {
+                        return null;
+                      } else {
                         countDoc = 1;
                         return squares[j * 20 + i];
+                      }
                     }
                 }
             } else {
